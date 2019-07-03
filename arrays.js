@@ -42,4 +42,4 @@ function calc(tip) {
     }
 }
 console.log(calc(300));
-
+ //github test
