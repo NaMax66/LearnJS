@@ -17,7 +17,7 @@ function yearsUntilRetirement(birthYear, firstName) {
 
 yearsUntilRetirement(1988, 'Max');
 
-var name = 'Mike';
+var name = "";
 
 function str(name, years) {
 
@@ -32,4 +32,8 @@ console.log(statement);
 var isJohn = name === 'John' ? 'Yes' : 'No';
 console.log(isJohn);
 
-//0 '' null нихрена
+//0 '' null нихрена - false
+
+if(name) console.log('var name is defined');
+
+if(5 == '5') console.log('coercion');
