@@ -10,22 +10,19 @@ GAME RULES:
 - 6 coding challenge included
 */
 
-var scores, roundScore, activePlayer;
+"use strict";
 
-scores = [0, 0];
-roundScore = 0;
-activePlayer = 0;
+var scores, roundScore, activePlayer, targetScore, gamePlaying, previousDiseIsSix;
 
+targetScore = 20;
 
-
+init();
 
 //dice = Math.floor(Math.random() * 6 + 1);
 //document.querySelector('#current-' + activePlayer).textContent = dice; это для доб текста
 //document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>'; //это для доб элемента
 //var x = document.querySelector('#score-0').textContent; //используем для чтения
 //console.log(x);
-
-
 
 // setTimeout(function(){
 //     document.querySelector('#dice-1').style.display = 'none'; //работаетм с css
@@ -43,89 +40,144 @@ function torglePlayer() {
     document.querySelector('.player-0-panel').classList.toggle('active');
 }
 
-setTimeout(clear_dice, 1000); // не работает. кубики исчезают сразу же если передать с ()
+/* setTimeout(clear_dice, 1000); */ // кубики исчезают сразу же если передать с ()
 
 // setTimeout(function(){
 //     alert("Boom!");
 // }, 2000);
 
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-1').textContent = '0';
-document.getElementById('current-1').textContent = '0'; //можно не вводить #
+//можно не вводить #
 
 // function btn(){}
 // btn();
 //document.querySelector('.btn-roll').addEventListener('click', btn); //можно почитать на MDN используем функцию без скобок, так
 //как не хотим ее вызывать прямо сейчас
 document.querySelector('.btn-roll').addEventListener('click', function() {
-    //это анонимная функция
-    //random number
-    //2 Display the result
-    //меняем картинку
-    function rollTheDice(name, dice) {
-        var diceDOM = document.querySelector(name);
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+    if (gamePlaying) {
+        //это анонимная функция
+        //random number
+        //2 Display the result
+        //меняем картинку
+
+
+        var dice1 = Math.floor(Math.random() * 6 + 1);
+
+        rollTheDice('#dice-1', dice1);
+
+
+        var dice2 = Math.floor(Math.random() * 6 + 1);
+
+        rollTheDice('#dice-2', dice2);
+
+        if (previousDiseIsSix) {
+            setScoresToZero();
+            torglePlayer();
+        }
+
+        if (dice1 === 6 || dice2 === 6) {
+            previousDiseIsSix = true;
+        } else previousDiseIsSix = false;
+
+        if (dice1 !== 1 && dice2 !== 1) {
+            //add score
+            roundScore += dice2 + dice1;
+            document.querySelector('#current-' + activePlayer).textContent = roundScore;
+        } else {
+            //next player
+            previousDiseIsSix = false;
+            roundScore = 0;
+            document.getElementById('current-' + activePlayer).textContent = roundScore;
+
+            // document.querySelector('.player-0-panel').classList.remove('active');
+            // document.querySelector('.player-1-panel').classList.add('active');
+            torglePlayer();
+            setTimeout(clear_dice, 500);
+        }
+
     }
-
-    var dice1 = Math.floor(Math.random() * 6 + 1);
-
-    rollTheDice('#dice-1', dice1);
-
-
-    var dice2 = Math.floor(Math.random() * 6 + 1);
-
-    rollTheDice('#dice-2', dice2);
-
-    if (dice1 !== 1 && dice2 !== 1) {
-        //add score
-        roundScore += dice2 + dice1;
-        document.querySelector('#current-' + activePlayer).textContent = roundScore;
-    } else {
-        //next player
-        roundScore = 0;
-        document.getElementById('current-' + activePlayer).textContent = roundScore;
-
-        // document.querySelector('.player-0-panel').classList.remove('active');
-        // document.querySelector('.player-1-panel').classList.add('active');
-        torglePlayer();
-        setTimeout(clear_dice, 1000);
-
-    }
-
-
-
     //3.Update the round score IF the rolled number was NOT a 1
 });
 
 document.querySelector('.btn-hold').addEventListener('click', function() {
+    if (gamePlaying) {
 
-    console.log(roundScore);
-    //add current score to global score
-    scores[activePlayer] += roundScore;
-    roundScore = 0;
+        previousDiseIsSix = false;
 
-    //update the UI
-    document.getElementById('current-' + activePlayer).textContent = roundScore;
-    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
-    //Check if player won the game
-    if (scores[activePlayer] >= 20) {
+        console.log(roundScore);
+        //add current score to global score
+        scores[activePlayer] += roundScore;
+        roundScore = 0;
 
-        document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+        //update the UI
+        clearScores();
+        //Check if player won the game
+        if (scores[activePlayer] >= targetScore) {
+            gamePlaying = false;
+            document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
 
-        setTimeout(function() { alert('We have a winner') }, 10); //какой есть адекватный способ выполняться функции по-порядку?
-        setTimeout(clear_dice, 1000);
-        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
-        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+            setTimeout(function() { alert('We have a winner') }, 10); //какой есть адекватный способ выполняться функции по-порядку?
+            setTimeout(clear_dice, 500);
+            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+            document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
 
-    } else { // продолжаем игру только еслу у нас нет победителя
-        torglePlayer();
-        setTimeout(clear_dice, 1000);
+        } else { // продолжаем игру только еслу у нас нет победителя
+            torglePlayer();
+            setTimeout(clear_dice, 1000);
+        }
+    }
+});
+
+document.querySelector('.btn-new').addEventListener('click', init);
+
+document.getElementById('target-score-input').addEventListener('keypress', function(e) {
+
+    var key = e.which || e.keyCode;
+    if (key === 13) { //это код интера
+        targetScore = document.getElementById('target-score-input').value;
+        document.getElementById('target-score-header').textContent = 'TARGET SCORE:' + targetScore;
     }
 
-
-
-
-
 });
+
+function init() { //почему после new game targetScore undefined
+    previousDiseIsSix = false;
+    scores = [0, 0];
+    activePlayer = 0;
+    roundScore = 0;
+    gamePlaying = true;
+    previousDiseIsSix = false;
+    document.getElementById('score-0').textContent = '0';
+    document.getElementById('score-1').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+    document.getElementById('target-score-header').textContent = 'TARGET SCORE:' + targetScore;
+    document.getElementById('name-0').textContent = 'Player 1';
+    document.getElementById('name-1').textContent = 'Player 2';
+    document.querySelector('.player-0-panel').classList.remove('winner');
+    document.querySelector('.player-1-panel').classList.remove('winner');
+    document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
+    document.querySelector('.player-0-panel').classList.add('active');
+    clear_dice();
+
+
+
+};
+
+function rollTheDice(name, dice) {
+    var diceDOM = document.querySelector(name);
+    diceDOM.style.display = 'block';
+    diceDOM.src = 'dice-' + dice + '.png';
+}
+
+function clearScores() {
+    document.getElementById('current-' + activePlayer).textContent = roundScore;
+    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+
+}
+
+function setScoresToZero() {
+    document.querySelector('#current-' + activePlayer).textContent = 0;
+    scores[activePlayer] = 0;
+    document.querySelector('#score-' + activePlayer).textContent = 0;
+}
