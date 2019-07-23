@@ -55,3 +55,28 @@ function third() {
     console.log(a + d);
 }
 
+var mary = {
+    name: 'Mary',
+    yearOfBirth: 1990,
+    calculateAge: function () {
+        console.log(this);
+        console.log(2016 - this.yearOfBirth);
+        // function innerFunction() {
+        //     console.log(this);
+        // }
+        // innerFunction();
+    }
+}
+
+mary.calculateAge();
+
+var mike = {
+    name: 'Mike',
+    yearOfBirth: 1984
+};
+
+mike.calculateAge = mary.calculateAge;
+
+mike.calculateAge();
+
+//this всегда относится к объекту - в котором был вызван метод с этой сущностью
