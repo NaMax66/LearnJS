@@ -35,6 +35,7 @@ function clear_dice() {
 }
 
 function torglePlayer() {
+    previousDiseIsSix = false;
     activePlayer === 0 ? activePlayer = 1 : activePlayer = 0; //ternary operator
     document.querySelector('.player-1-panel').classList.toggle('active');
     document.querySelector('.player-0-panel').classList.toggle('active');
@@ -69,14 +70,17 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 
         rollTheDice('#dice-2', dice2);
 
-        if (previousDiseIsSix) {
-            setScoresToZero();
+        if ((dice1 === 6 || dice2 === 6) && previousDiseIsSix) {
+            //player looses the score
+            scores[activePlayer] = 0;
+            document.querySelector('#score-' + activePlayer).textContent = '0';
             torglePlayer();
-        }
+            clear_dice();
 
+        }
         if (dice1 === 6 || dice2 === 6) {
             previousDiseIsSix = true;
-        } else previousDiseIsSix = false;
+        }
 
         if (dice1 !== 1 && dice2 !== 1) {
             //add score
