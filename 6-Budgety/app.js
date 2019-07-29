@@ -1,31 +1,56 @@
 //First - plan, structure, architecture
 let budgetController = (function() { //сохраняем объект с методом publicTest у кот. есть доступ к x и add()
-    let x = 23; //private var
 
-    let add = function(a) { //private func
-        return x + a;
-    }
-
-    return { //public func
-        publicTest: function(b) {
-            return (add(b));
-        }
-    }
 })();
 
 
 
 let UIController = (function() {
-    return 5;
+
+    let DOMStrings = {
+        inputType: '.add__type',
+        inputDescription: '.add__description',
+        inputValue: '.add__value',
+        inputBtn: '.add__btn'
+    }
+
+    return {
+        getInput: function() {
+            return {
+                type: document.querySelector(DOMStrings.inputType).value, //will be either inc or exp
+                description: document.querySelector(DOMStrings.inputDescription).value,
+                value: document.querySelector(DOMStrings.inputValue).value
+            };
+        },
+        getDOMStrings: function() {
+            return DOMStrings; //we exposing the DOMStrings into the public
+        }
+    };
+
+
 })();
 
-let controller = (function(budgetCtrl, UICtrl) { //APP controller - объединяет два верхних модуля 
-    var z = budgetCtrl.publicTest(5);
-    return {
-        anotherPublic: function() {
-            console.log(z);
-            console.log(z);
+let controller = (function(budgetCtrl, UICtrl) { //GLOBAL APP controller - объединяет два верхних модуля 
 
-        }
+    let DOM = UIController.getDOMStrings();
+
+    let ctrlAddItem = function() {
+        //TODO: 1. Get input data
+        let input = UIController.getInput();
+        console.log(input);
+
+        //2. add the item to the budget controller
+        //3. add item to the user UI
+        //4. calc budget
+        //5. display the budget
     }
+
+    document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+    document.addEventListener('keypress', function(event) { //or just 'e'
+        if (event.keyCode === 13 || event.which === 13) {
+            ctrlAddItem();
+        }
+    });
+
 })(budgetController, UIController);
