@@ -12,11 +12,9 @@ let budgetController = (function() { //сохраняем объект с мет
         this.value = value;
     };
 
-
     // let allExpenses = []; - so so way. It is better to put all these to an object
     // let allIncomes = [];
     // let totalExpenses = 0;
-
     //data structure
 
     let data = {
@@ -59,8 +57,6 @@ let budgetController = (function() { //сохраняем объект с мет
         }
 
     };
-
-
 })();
 
 let UIController = (function() {
@@ -71,7 +67,6 @@ let UIController = (function() {
         inputValue: '.add__value',
         inputBtn: '.add__btn'
     }
-
     return {
         getInput: function() {
             return {
@@ -106,7 +101,6 @@ let controller = (function(budgetCtrl, UICtrl) { //GLOBAL APP controller - об�
         let input, newItem;
         //1. Get input data
         input = UIController.getInput();
-
 
         //2. add the item to the budget controller
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
