@@ -11,8 +11,8 @@ function calculateAge(birthYear) {
 function yearsUntilRetirement(birthYear, firstName) {
     var age = calculateAge(birthYear);
     var retirement = 65 - age;
-    console.log(firstName + ' retires in ' + retirement
-    + ' years.');
+    console.log(firstName + ' retires in ' + retirement +
+        ' years.');
 }
 
 yearsUntilRetirement(1988, 'Max');
@@ -32,8 +32,8 @@ console.log(statement);
 var isJohn = name === 'John' ? 'Yes' : 'No';
 console.log(isJohn);
 
-//0 '' null нихрена - false
+//0 '' null - false
 
-if(name) console.log('var name is defined');
+if (name) console.log('var name is defined');
 
-if(5 == '5') console.log('coercion');
+if (5 == '5') console.log('coercion');
