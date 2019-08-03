@@ -1,28 +1,25 @@
 //Function constructor
 
-// var john = {
-//     name: 'John',
-//     yearOfBirth: 1990,
-//     job: 'teacher'
-// };
-//
-// var Person = function(name, yearOfBirth, job) {
-//         this.name = name;
-//         this.yearOfBirth = yearOfBirth;
-//         this.job = job;
-//         };
-//
-//      // this is the function constructor
-//
-//
-// Person.prototype.calculateAge =
-//     function () {
-//         console.log(2019 - this.yearOfBirth);
-//     };
-//
-// Person.prototype.lastName = 'Smith'; //это свойство будет у всех объектов этого конструктора
-//
-// var john = new Person('John', 1990, 'teacher');
+var john = {
+    name: 'John',
+    yearOfBirth: 1990,
+    job: 'teacher'
+};
+
+var Person = function(name, yearOfBirth, job) {
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.job = job;
+};
+
+Person.prototype.calculateAge =
+    function() {
+        console.log(2019 - this.yearOfBirth);
+    };
+
+Person.prototype.lastName = 'Smith'; //это свойство будет у всех объектов этого конструктора
+
+var john = new Person('John', 1990, 'teacher'); //сначала срабатывает new - создавая пустой объект, потом срабатывает ф-я
 //
 // john.calculateAge();
 //
@@ -33,6 +30,8 @@
 // var mark = new Person('Mark', 1948, 'retired');
 //
 // mark.calculateAge();
+
+
 
 //Object.create
 //
@@ -53,6 +52,10 @@
 //     yearOfBirth: {value: 1969},
 //     job: {value: 'designer'}
 // });
+
+
+
+
 //Primitives vs Objects
 
 // var a = 23;
@@ -76,8 +79,10 @@
 //
 // console.log(obj1.age);
 // console.log(obj2.age);
-//
-//
+
+
+
+
 // //functions
 // var age = 27;
 // var obj = {
@@ -89,19 +94,18 @@
 //     a = 30;
 //     b.city = 'San Francisco';
 // }
-//
-//
-//
+
 // change(age, obj);
-//
 // console.log(age);
 // console.log(obj.city);
 
+
+//Передаем функцию в функцию
 var years = [1990, 1965, 1937, 2005, 1998];
 
 function arrayCalc(arr, fn) {
-    var arrRes  = [];
-    for(var i = 0; i < arr.length; i++){
+    var arrRes = [];
+    for (var i = 0; i < arr.length; i++) {
         arrRes.push(fn(arr[i]));
     }
     return arrRes;
@@ -116,35 +120,19 @@ function isFullAge(el) { //very generic parameter
 }
 
 function maxHeartRate(el) {
-    if(el >= 18 && el <= 81){
+    if (el >= 18 && el <= 81) {
         return Math.round(206.9 - 0.67 * el);
-    }else return -1;
+    } else return -1;
 }
 
-var ages = arrayCalc(years, calculateAge);
+// var ages = arrayCalc(years, calculateAge);
 
-console.log(ages);
+// console.log(ages);
 
-var fullAges = arrayCalc(ages, isFullAge);
+// var fullAges = arrayCalc(ages, isFullAge);
 
-console.log(fullAges);
+// console.log(fullAges);
 
-var rates = arrayCalc(ages, maxHeartRate);
+// var rates = arrayCalc(ages, maxHeartRate);
 
-console.log(rates);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// console.log(rates);
