@@ -24,7 +24,7 @@ john.shift(); //удалить первый
 
 john.indexOf(1900); // если -1 элемента нет
 
-var isDesigner = john.indexOf('designer') === -1 ? 'John is not a designer':
+var isDesigner = john.indexOf('designer') === -1 ? 'John is not a designer' :
     'John is a designer';
 
 console.log(isDesigner);
@@ -32,7 +32,7 @@ console.log(isDesigner);
 console.log('-----Challenge-----');
 
 function calc(tip) {
-    switch(true) {
+    switch (true) {
         case (tip < 50):
             return tip * 0.2;
         case (tip > 200):
@@ -42,4 +42,3 @@ function calc(tip) {
     }
 }
 console.log(calc(300));
- //github test
