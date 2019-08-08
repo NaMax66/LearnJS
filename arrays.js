@@ -42,3 +42,18 @@ function calc(tip) {
     }
 }
 console.log(calc(300));
+
+console.log('---------------08.08.19------------------');
+
+let test = [1, 3, 6, 12, 34];
+console.log(test);
+
+let index = test.indexOf(34);
+
+let ids = test.map((current)=>{
+    return current.id;
+});
+
+console.log(ids);
+
+console.log(index);

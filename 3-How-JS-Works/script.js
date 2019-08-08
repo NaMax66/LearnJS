@@ -58,6 +58,7 @@ function third() {
 var mary = {
     name: 'Mary',
     yearOfBirth: 1990,
+    //this всегда относится к объекту - в котором был вызван метод с этой сущностью
     calculateAge: function () {
         console.log(this);
         console.log(2016 - this.yearOfBirth);
@@ -79,4 +80,8 @@ mike.calculateAge = mary.calculateAge;
 
 mike.calculateAge();
 
-//this всегда относится к объекту - в котором был вызван метод с этой сущностью
+let arr = new Array(10);
+for (let i = 0; i < arr.length; i++) {
+    arr[i] = i;
+}
+console.dir(arr);
