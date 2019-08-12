@@ -8,7 +8,7 @@ var boxesArr5 = Array.prototype.slice.call(boxes); //get array
 boxesArr5.forEach(function (cur) {
     cur.style.backgroundColor = 'dodgerblue';
 });
-
+//Lecture
 //ES6
 const boxesArr6 = Array.from(boxes); //we can put here NodeList
 boxesArr6.forEach(cur => cur.style.backgroundColor = 'dodgerblue');
