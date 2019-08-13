@@ -1,3 +1,5 @@
+//difficult syntax version
+
 const getIDs = new Promise((resolve, reject)=>{ //put two func as a parameters
     //executor
     setTimeout(()=>{
