@@ -1,8 +1,8 @@
 //Async JS
 const second = () =>{
-    setTimeout(() =>{
-        console.log('Async Hey there');
-    }, 2000)
+    setTimeout((name) =>{
+        console.log('Async Hey there ' + name);
+    }, 2000, 'Max')
 };
 const first = () =>{
     console.log('Hey there');
