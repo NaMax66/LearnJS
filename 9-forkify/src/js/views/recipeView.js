@@ -1,12 +1,12 @@
 import {elements} from "./base";
-import { Fraction } from 'fractional'
+import {Fraction} from 'fractional'
 
-export  const clearRecipe = () => {
-  elements.recipe.innerHTML = '';
+export const clearRecipe = () => {
+    elements.recipe.innerHTML = '';
 };
 
 const formatCount = count => {
-    if (count){
+    if (count) {
         //count 2.5 --> 2 1/2
         //count 0.5 --> 1/2
 
@@ -15,14 +15,13 @@ const formatCount = count => {
         if (!dec) return count;
 
 
-
         if (int === 0) {
             const fr = new Fraction(count);
-            const frRound = Math.round(fr.numerator/fr.denominator*10)/10;
+            const frRound = Math.round(fr.numerator / fr.denominator * 10) / 10;
             return `${frRound}`;
         } else {
             const fr = new Fraction(count - int);
-            const frRound = Math.round(fr.numerator/fr.denominator*10)/10;
+            const frRound = Math.round(fr.numerator / fr.denominator * 10) / 10;
             return `${int} ${frRound}`;
         }
     }
@@ -30,12 +29,12 @@ const formatCount = count => {
 };
 
 const createIngredient = ingredient => {
-  return `
+    return `
   <li class="recipe__item">
                     <svg class="recipe__icon">
                         <use href="img/icons.svg#icon-check"></use>
                     </svg>
-                    <div class="recipe__count">${formatCount(Math.round(ingredient.count * 10)/10)}</div>
+                    <div class="recipe__count">${formatCount(Math.round(ingredient.count * 10) / 10)}</div>
                     <div class="recipe__ingredient">
                        <span class="recipe__unit">${ingredient.unit}</span>         
                        ${ingredient.ingredient}           
@@ -44,7 +43,7 @@ const createIngredient = ingredient => {
   `
 };
 export const renderRecipe = recipe => {
-  const markup = `
+    const markup = `
             <figure class="recipe__fig">
                 <img src="${recipe.img}" alt="${recipe.title}" class="recipe__img">
                 <h1 class="recipe__title">
@@ -88,24 +87,12 @@ export const renderRecipe = recipe => {
                 </button>
             </div>
 
-
-
             <div class="recipe__ingredients">
                 <ul class="recipe__ingredient-list">
                     ${recipe.ingredients.map(el => createIngredient(el)).join(' ')}
-                    <li class="recipe__item">
-                        <svg class="recipe__icon">
-                            <use href="img/icons.svg#icon-check"></use>
-                        </svg>
-                        <div class="recipe__count">1000</div>
-                        <div class="recipe__ingredient">
-                            <span class="recipe__unit">g</span>
-                            pasta
-                        </div>
-                    </li>
                 </ul>
 
-                <button class="btn-small recipe__btn">
+                <button class="btn-small recipe__btn recipe__btn--add">
                     <svg class="search__icon">
                         <use href="img/icons.svg#icon-shopping-cart"></use>
                     </svg>
@@ -127,7 +114,7 @@ export const renderRecipe = recipe => {
                 </a>
             </div>`;
 
-  elements.recipe.insertAdjacentHTML('afterbegin', markup);
+    elements.recipe.insertAdjacentHTML('afterbegin', markup);
 
 };
 export const updateServingsIngrediens = recipe => {
@@ -136,7 +123,7 @@ export const updateServingsIngrediens = recipe => {
     //Update ingredients
     const countElements = Array.from(document.querySelectorAll('.recipe__count'));
     //looping through two arrays
-    countElements.forEach((el, i) =>{
+    countElements.forEach((el, i) => {
         el.textContent = formatCount(recipe.ingredients[i].count);
     })
 };
