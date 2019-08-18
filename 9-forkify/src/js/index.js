@@ -1,7 +1,9 @@
+import {elements, renderLoader, clearLoader} from "./views/base";
+
 import Search from "./modules/Search";
 import Recipe from "./modules/Recipe";
 import List from "./modules/List";
-import {elements, renderLoader, clearLoader} from "./views/base";
+
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as listView from './views/listView'
@@ -133,9 +135,9 @@ const controlList = () => {
 };
 
 //Handle delete and update list item events
-elements.shopping.addEventListener('click', e => {
+elements.shopping.addEventListener('click', event => {
     //read id from the closest shopping item
-    const id = e.target.closest('.shopping__item').dataset.itemid;
+    const id = event.target.closest('.shopping__item').dataset.itemid;
 
     //Handle the delete
     if (e.target.matches('.shopping__delete, .shopping__delete *')){
@@ -145,13 +147,12 @@ elements.shopping.addEventListener('click', e => {
         listView.deleteItem(id);
 
         //handle the count update
-        //TODO: understand how it is working!
+        //TODO: understand how is it working?
     } else if(e.target.matches('.shopping__count-value')) {
         const val = parseFloat(e.target.value, 10);
         state.list.updateCount(id, val);
     }
 });
-
 
 // Handling recipe btn clicks
 elements.recipe.addEventListener('click', e =>{
