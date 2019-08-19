@@ -24,43 +24,43 @@ const state = {};
  * Search controller
  * @returns {Promise<void>}
  */
-const controlSearch = async () =>{
-  //1) get the query from the view
-  const query = searchView.getInput();
+const controlSearch = async () => {
+    //1) get the query from the view
+    const query = searchView.getInput();
 
 
-  if(query){
-      //2) new search obj and add to state
-      state.search = new Search(query);
-      //3) Prepare UI for results
-      searchView.clearInput();
-      searchView.clearResults();
-      renderLoader(elements.searchRes);
+    if (query) {
+        //2) new search obj and add to state
+        state.search = new Search(query);
+        //3) Prepare UI for results
+        searchView.clearInput();
+        searchView.clearResults();
+        renderLoader(elements.searchRes);
 
-      try {
-          //4)Search for recipes
-          await state.search.getResults(); //here we should wait
+        try {
+            //4)Search for recipes
+            await state.search.getResults(); //here we should wait
 
-          //5) Render results on UI
-          clearLoader();
-          searchView.renderResults(state.search.result)
-      }catch (e) {
-          console.log(e);
-          alert('smth with the lodader');
-          clearLoader();
-      }
+            //5) Render results on UI
+            clearLoader();
+            searchView.renderResults(state.search.result)
+        } catch (e) {
+            console.log(e);
+            alert('smth with the lodader');
+            clearLoader();
+        }
 
-  }
+    }
 };
 
-elements.searchForm.addEventListener('submit', e =>{
-   e.preventDefault();
-   controlSearch();
+elements.searchForm.addEventListener('submit', e => {
+    e.preventDefault();
+    controlSearch();
 });
 
-elements.searchResPages.addEventListener('click', e =>{
+elements.searchResPages.addEventListener('click', e => {
     const btn = e.target.closest('.btn-inline');
-    if (btn){
+    if (btn) {
         //get data from attribute data-goto
         const goToPage = parseInt(btn.dataset.goto, 10); //base 10
         searchView.clearResults();
@@ -77,7 +77,7 @@ elements.searchResPages.addEventListener('click', e =>{
 const controlRecipe = async () => {
 
     //get id from url
-    const id = window.location.hash.replace('#','');
+    const id = window.location.hash.replace('#', '');
     if (id) {
         //prepare UI
         recipeView.clearRecipe();
@@ -85,7 +85,7 @@ const controlRecipe = async () => {
 
         //highlight selected
 
-        if(state.search) searchView.highlightSelected(id);
+        if (state.search) searchView.highlightSelected(id);
 
         //create new recipe obj
         state.recipe = new Recipe(id);
@@ -105,7 +105,7 @@ const controlRecipe = async () => {
 
             //render recipe
             clearLoader();
-            recipeView.renderRecipe(state.recipe);
+            recipeView.renderRecipe(state.recipe, state.likes.isLiked(id)); //test if it is liked
         } catch (e) {
             console.log(e);
 
@@ -142,7 +142,7 @@ elements.shopping.addEventListener('click', event => {
     const id = event.target.closest('.shopping__item').dataset.itemid;
 
     //Handle the delete
-    if (e.target.matches('.shopping__delete, .shopping__delete *')){
+    if (e.target.matches('.shopping__delete, .shopping__delete *')) {
         //delete from state
         state.list.deleteItem(id);
         //delete from ui
@@ -150,7 +150,7 @@ elements.shopping.addEventListener('click', event => {
 
         //handle the count update
         //TODO: understand how is it working?
-    } else if(e.target.matches('.shopping__count-value')) {
+    } else if (e.target.matches('.shopping__count-value')) {
         const val = parseFloat(e.target.value, 10);
         state.list.updateCount(id, val);
     }
@@ -160,59 +160,63 @@ elements.shopping.addEventListener('click', event => {
 /**
  * LIKE CONTROLLER
  */
+//testing
+state.likes = new Likes();
+likesView.toggleLikeMenu(state.likes.getNumLikes());
+//end
+
 const controlLike = () => {
-  if (!state.likes) state.likes = new Likes();
-  const currentID = state.recipe.id;
-  
-  //User has not yet liked current recipe
-  if (!state.likes.isLiked(currentID)){
-      //add likes to state
-      const newLike = state.likes.addLike(
-          currentID,
-          state.recipe.title,
-          state.recipe.author,
-          state.recipe.img
-      )
-      
-      //toggle like button
-      likesView.toggleLikeBtn(true);
+    if (!state.likes) state.likes = new Likes();
+    const currentID = state.recipe.id;
 
-      //add to ui
-      console.log(state.likes);
+    //User has not yet liked current recipe
+    if (!state.likes.isLiked(currentID)) {
+        //add likes to state
+        const newLike = state.likes.addLike(
+            currentID,
+            state.recipe.title,
+            state.recipe.author,
+            state.recipe.img
+        );
 
-  //User has liked current recipe and we should delete it
-  } else {
-      //remove from the state
-      state.likes.deleteLike(currentID);
-      //Toggle the like button
-      likesView.toggleLikeBtn(false);
-      
-      //Remove like from ui
-      console.log(state.likes);
-      
-  }
+        //toggle like button
+        likesView.toggleLikeBtn(true);
+
+        //add to ui
+        likesView.renderLike(newLike);
+
+        //User has liked current recipe and we should delete it
+    } else {
+        //remove from the state
+        state.likes.deleteLike(currentID);
+        //Toggle the like button
+        likesView.toggleLikeBtn(false);
+
+        //Remove like from ui
+        likesView.deleteLike(currentID);
+    }
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
 };
 
 
 // Handling recipe btn clicks
-elements.recipe.addEventListener('click', e =>{
-   if (e.target.matches('.btn-decrease, .btn-decrease *')) { //* point to any child element
-       if (state.recipe.servings > 1){
-           state.recipe.updateServings('dec');
-           recipeView.updateServingsIngrediens(state.recipe);
-       }
-   } else if (e.target.matches('.btn-increase, .btn-increase *')) {
-       state.recipe.updateServings('inc');
-       recipeView.updateServingsIngrediens(state.recipe);
-   } else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
-       //add ingredients to shopping list
-       controlList();
-   } else if (e.target.matches('.recipe__love, .recipe__love *')){
-       //Like controller
-       controlLike();
-       console.log('210');
-   }
-   
+elements.recipe.addEventListener('click', e => {
+    if (e.target.matches('.btn-decrease, .btn-decrease *')) { //* point to any child element
+        if (state.recipe.servings > 1) {
+            state.recipe.updateServings('dec');
+            recipeView.updateServingsIngrediens(state.recipe);
+        }
+    } else if (e.target.matches('.btn-increase, .btn-increase *')) {
+        state.recipe.updateServings('inc');
+        recipeView.updateServingsIngrediens(state.recipe);
+    } else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+        //add ingredients to shopping list
+        controlList();
+    } else if (e.target.matches('.recipe__love, .recipe__love *')) {
+        //Like controller
+        controlLike();
+    }
+
 });
 
 
