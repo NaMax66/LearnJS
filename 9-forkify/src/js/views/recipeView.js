@@ -5,23 +5,26 @@ export const clearRecipe = () => {
     elements.recipe.innerHTML = '';
 };
 
+
 const formatCount = count => {
     if (count) {
         //count 2.5 --> 2 1/2
         //count 0.5 --> 1/2
 
-        const [int, dec] = count.toString().split('.').map(el => parseInt(el, 10));
+        const newCount = Math.round(count * 10) / 10;
 
-        if (!dec) return count;
+        const [int, dec] = newCount.toString().split('.').map(el => parseInt(el, 10));
+
+        if (!dec) return newCount;
 
 
         if (int === 0) {
-            const fr = new Fraction(count);
-            const frRound = Math.round(fr.numerator / fr.denominator * 10) / 10;
+            const fr = new Fraction(newCount);
+            const frRound = fr.numerator / fr.denominator;
             return `${frRound}`;
         } else {
-            const fr = new Fraction(count - int);
-            const frRound = Math.round(fr.numerator / fr.denominator * 10) / 10;
+            const fr = new Fraction(newCount - int);
+            const frRound = fr.numerator / fr.denominator;
             return `${int} ${frRound}`;
         }
     }
